@@ -1,0 +1,14 @@
+.git/
+.venv/
+.pytest_cache/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+data/*.db
+data/*.db-wal
+data/*.db-shm
+.vscode/
+.coverage
+htmlcov/

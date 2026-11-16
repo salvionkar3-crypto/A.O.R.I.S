@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  jarvis:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: jarvis-assistant
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8000}:${PORT:-8000}"
+    environment:
+      - PORT=${PORT:-8000}
+      - JARVIS_ENV=${JARVIS_ENV:-production}
+      - JARVIS_LOG_LEVEL=${JARVIS_LOG_LEVEL:-INFO}
+      - JARVIS_DATA_DIR=/app/data
+      - JARVIS_API_KEY=${JARVIS_API_KEY:-}
+      - NEBIUS_API_KEY=${NEBIUS_API_KEY:-}
+      - NEBIUS_BASE_URL=${NEBIUS_BASE_URL:-https://api.tokenfactory.nebius.com/v1}
+      - NEBIUS_DEFAULT_MODEL=${NEBIUS_DEFAULT_MODEL:-nebius/nvidia/nemotron-3-super-120b-a12b}
+      - NVIDIA_API_KEY=${NVIDIA_API_KEY:-}
+    volumes:
+      - jarvis_data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:${PORT:-8000}/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  jarvis_data:
+    name: jarvis_persistent_data
